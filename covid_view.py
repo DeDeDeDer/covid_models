@@ -7,6 +7,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
+import dash_table
 
 from sklearn.linear_model import RidgeClassifier, LogisticRegression, Lasso, Ridge, BayesianRidge
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
@@ -30,6 +31,7 @@ pd.set_option('display.width', 1000)
 # maindata_dir = '/Users/derrick/Desktop/All_Country_Covid19.csv'
 maindata_dir = 'data/All_Country_Covid19.csv'
 country_list = list(pd.read_csv(maindata_dir)['Country_Province'].unique())
+country_list = sorted(country_list)
 country_list = [x for x in country_list if x]
 country_list = [x for x in country_list if str(x) != 'nan']
 country_dict = []
@@ -220,11 +222,11 @@ app.layout = html.Div([
 html.A(['Brief:'], style={'font-weight': 'bold'}),
             html.Div([
                 html.Li(['Done by DCMK'], style={'list-style-type': 'None'}),
-                html.Li(['Last Updated: 28 June 2020'], style={'list-style-type': 'None'}),
-                html.Li(['Data Source: COVIDAnalytics'], style={'list-style-type': 'None'}),
-html.Li(['Do let me know if there are any discrepancies in the data'], style={'list-style-type': 'None'}),
+                html.Li(['Last updated: 28 June 2020'], style={'list-style-type': 'None'}),
+                html.Li(['Data source: COVIDAnalytics'], style={'list-style-type': 'None'}),
+html.Li(['Do let me know if there are any discrepancies in the models'], style={'list-style-type': 'None'}),
                 html.Li([
-                            'This dashboard aims to shows application of supervised models to predict covid19 infection numbers'],
+                            'This dashboard shows application of supervised models to project covid19 infection numbers'],
                         style={'list-style-type': 'None'}),
 
             ], className='Header-brief'),
@@ -317,6 +319,25 @@ html.Li(['Do let me know if there are any discrepancies in the data'], style={'l
         html.Div([
             dcc.Graph(id='my_bee_map', figure={}),
         ], className='chart-A-container'),
+
+        html.Div([
+            dash_table.DataTable(
+                id='df',
+                columns=[
+                    {'name':'Evaluation Metric', 'id': 'Evaluation Metric'},
+                    {'name':'Values', 'id': 'Values'},
+                ],
+                style_as_list_view=True,
+                style_cell={'textAlign': 'center', 'backgroundColor': 'black', 'color': 'white', 'maxWidth': 10},
+                style_header={'backgroundColor': 'black', 'fontWeight': 'bold', 'color': 'white', 'maxWidth': 10},
+                style_cell_conditional=[
+                    {'if': {'column_id': 'Evaluation Metric'}, 'textAlign': 'right'},
+{'if': {'column_id': 'Values'}, 'textAlign': 'center'}
+                ],
+                style_table={'width': '40%'},
+            )
+        ], style={'margin-left': '20px'}),
+        html.Br(),
         # html.Div([
         #
         #     dcc.Dropdown(id="Eval_Metrics",
@@ -376,9 +397,9 @@ def set_cities_options(selected_model):
 @app.callback(
     # [Output(component_id='output_container', component_property='children'),
     #  Output(component_id='my_bee_map', component_property='figure')],
-    Output(component_id='my_bee_map', component_property='figure'),
-#    Output(component_id='my_bee_map2', component_property='figure'),
-
+    [Output(component_id='my_bee_map', component_property='figure'),
+Output(component_id='df', component_property='data'),
+],
     [Input(component_id='Country Province', component_property='value'),
      Input(component_id='Model', component_property='value'),
         Input(component_id='Future_Days', component_property='value'),
@@ -535,8 +556,8 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
                      template='plotly_dark',width=600, height=400)
     # fig = px.scatter(data_frame=df_work, x='date',y=y_response, template='plotly_dark')
     #fig.add_trace(px.line(data_frame=valid, x='Label', y=y_prediction))
-    fig.add_scatter(mode='markers',x=df_valid[date_col], y=df_valid[y_response])
-    fig.add_scatter(mode='lines', x=df_pred[date_col], y=df_pred['Predictions'])
+    fig.add_scatter(mode='markers',x=df_valid[date_col], y=df_valid[y_response], name='Validation Data')
+    fig.add_scatter(mode='lines', x=df_pred[date_col], y=df_pred['Predictions'], name='Model Projection')
     cht1_title = '{} model projection for {}'.format(option_model,option_ctry)
     fig.update_layout(title=cht1_title,
                       xaxis_title="Date",  yaxis_title="Infected Numbers",
@@ -556,7 +577,7 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     mean_squared_log_error = mean_squared_log_error(validator,to_be_validated)
     median_absolute_error = median_absolute_error(validator,to_be_validated)
     mean_poisson_deviance = mean_poisson_deviance(validator,to_be_validated)
-    mean_gamma_deviance = mean_gamma_deviance(validator,to_be_validated)
+    # mean_gamma_deviance = mean_gamma_deviance(validator,to_be_validated)
 
     print(r2_score)
     print(max_error)
@@ -566,11 +587,12 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     print(median_absolute_error)
     print(mean_poisson_deviance)
     print(mean_gamma_deviance)
-    metric_name = ['R-Squared', 'Max Error', 'MAE', 'MSE', 'MSE Log', 'MSE Median', 'Mean Poisson Deviance', 'Mean Gamma Deviance']
-    metric_val = [r2_score, max_error, mean_absolute_error, mean_squared_error, mean_squared_log_error, median_absolute_error, mean_poisson_deviance, mean_gamma_deviance]
+    metric_name = ['R-Squared', 'Max Error', 'MAE', 'MSE', 'MSE Log', 'MSE Median', 'Mean Poisson Deviance']
+    metric_val = [r2_score, max_error, mean_absolute_error, mean_squared_error, mean_squared_log_error, median_absolute_error, mean_poisson_deviance]
+    metric_val = [round(x,4) for x in metric_val]
     df_metric = pd.DataFrame({
-        'Metric Names': metric_name,
-        'Metric Values': metric_val
+        'Evaluation Metric': metric_name,
+        'Values': metric_val
     })
     print(df_metric)
     print('Filter')
@@ -584,7 +606,8 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     # fig2 = px.scatter_geo(df, locations="iso_alpha",
     #                      size="pop",  # size of markers, "pop" is one of the columns of gapminder
     #                      )
-    return fig
+    print(df_metric.to_dict('rows'))
+    return fig,df_metric.to_dict('rows')
 
 
 

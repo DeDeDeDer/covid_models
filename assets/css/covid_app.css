@@ -5,7 +5,9 @@ position: absolute;
     padding:-2px;
     margin:-11px;
 }
-
+.DataTable{
+    margin: 20px;
+}
 .Headers Li, A{
     color: lightslategray;
 }
