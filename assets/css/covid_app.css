@@ -1,18 +1,49 @@
 .BodyBack{
-    background: black;
+    background-color: #0C0F0A;
+position: absolute;
+
+    padding:-2px;
+    margin:-11px;
 }
+
+.Headers Li, A{
+    color: lightslategray;
+}
+.Headers {
+    margin: 15px;
+    background-color: #0C0F0A;
+    color: aliceblue;
+}
+
+.header-Banner{
+    padding: 10px;
+    background-color: #0C0F0A;
+}
+
+.header-brief{
+    background-color: #0C0F0A;
+
+}
+.header-Notes{
+    background-color: #0C0F0A;
+    padding: 0;
+    margin: 0;
+
+}
+
+
 .box-row{
     color: aliceblue;
     border: darkred solid;
     width: 600px;
-    margin: 10px;
+    /*margin: 10px;*/
 
 }
 .box-row P{
     color: aliceblue;
 }
 .box-row-col{
-    width: 100%;
+    width: 70%;
     margin: 10px;
     color: black;
 
