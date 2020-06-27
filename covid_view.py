@@ -107,7 +107,7 @@ def GradienBoos(x_train, y_train,param_value_1,param_value_2,param_value_3):
                                      subsample=param_value_3).fit(x_train, y_train)
     return gbc
 def neural_N_mlp(x_train, y_train,param_value_1,param_value_2,param_value_3):
-    nn_act = ['identity', 'logistic', 'relu', 'softmax', 'tanh']
+    nn_act = ['identity', 'logistic', 'relu','tanh']
     nn_learn = ['constant', 'invscaling', 'adaptive']
     nn_leaf = ['lbfgs', 'sgd', 'adam']
     if param_value_1 is None or param_value_2 is None or param_value_3 is None:
@@ -168,7 +168,7 @@ mod_param_dict_1 = {
     'SVC': {'C': [1, 3, 5, 10, 40, 60, 80, 100]},
     'Random Forest': {'n_estimators':[10,20,30,50,70,100]},
     'Gradient Boosting': {'learning_rate': [0.1,0.2,0.3,0.4,0.5]},
-'Neural Network MLP': {'activation': ['identity', 'logistic', 'relu', 'softmax', 'tanh']},
+'Neural Network MLP': {'activation': ['identity', 'logistic', 'relu', 'tanh']},
 'K Nearest Neighbors': {'n_neighbors': [1,2,3,4,5,6,7,8,9,10]},
                }
 
@@ -576,7 +576,7 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     mean_squared_error = mean_squared_error(validator,to_be_validated)
     mean_squared_log_error = mean_squared_log_error(validator,to_be_validated)
     median_absolute_error = median_absolute_error(validator,to_be_validated)
-    mean_poisson_deviance = mean_poisson_deviance(validator,to_be_validated)
+    #mean_poisson_deviance = mean_poisson_deviance(validator,to_be_validated)
     # mean_gamma_deviance = mean_gamma_deviance(validator,to_be_validated)
 
     print(r2_score)
@@ -585,10 +585,10 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     print(mean_squared_error)
     print(mean_squared_log_error)
     print(median_absolute_error)
-    print(mean_poisson_deviance)
-    print(mean_gamma_deviance)
-    metric_name = ['R-Squared', 'Max Error', 'MAE', 'MSE', 'MSE Log', 'MSE Median', 'Mean Poisson Deviance']
-    metric_val = [r2_score, max_error, mean_absolute_error, mean_squared_error, mean_squared_log_error, median_absolute_error, mean_poisson_deviance]
+    #print(mean_poisson_deviance)
+    #print(mean_gamma_deviance)
+    metric_name = ['R-Squared', 'Max Error', 'MAE', 'MSE', 'MSE Log', 'MSE Median']
+    metric_val = [r2_score, max_error, mean_absolute_error, mean_squared_error, mean_squared_log_error, median_absolute_error]
     metric_val = [round(x,4) for x in metric_val]
     df_metric = pd.DataFrame({
         'Evaluation Metric': metric_name,
