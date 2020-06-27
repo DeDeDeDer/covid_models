@@ -317,26 +317,30 @@ html.Li(['Do let me know if there are any discrepancies in the models'], style={
 
         ]),
         html.Div([
-            dcc.Graph(id='my_bee_map', figure={}),
-        ], className='chart-A-container'),
+            html.Div([
+                dcc.Graph(id='my_bee_map', figure={}),
+            ], className='graphics-A-graph'),
 
-        html.Div([
-            dash_table.DataTable(
-                id='df',
-                columns=[
-                    {'name':'Evaluation Metric', 'id': 'Evaluation Metric'},
-                    {'name':'Values', 'id': 'Values'},
-                ],
-                style_as_list_view=True,
-                style_cell={'textAlign': 'center', 'backgroundColor': 'black', 'color': 'white', 'maxWidth': 10},
-                style_header={'backgroundColor': 'black', 'fontWeight': 'bold', 'color': 'white', 'maxWidth': 10},
-                style_cell_conditional=[
-                    {'if': {'column_id': 'Evaluation Metric'}, 'textAlign': 'right'},
-{'if': {'column_id': 'Values'}, 'textAlign': 'center'}
-                ],
-                style_table={'width': '40%'},
-            )
-        ], style={'margin-left': '20px'}),
+            html.Div([
+                dash_table.DataTable(
+                    id='df',
+                    columns=[
+                        {'name': 'Evaluation Metric', 'id': 'Evaluation Metric'},
+                        {'name': 'Values', 'id': 'Values'},
+                    ],
+                    style_as_list_view=True,
+                    style_cell={'textAlign': 'center', 'backgroundColor': 'rgb(17,17,17)', 'color': 'white'},
+                    style_header={'backgroundColor': 'rgb(17,17,17)', 'fontWeight': 'bold', 'color': 'white'},
+                    style_cell_conditional=[
+                        {'if': {'column_id': 'Evaluation Metric'}, 'textAlign': 'right'},
+                        {'if': {'column_id': 'Values'}, 'textAlign': 'center'}
+                    ],
+                    style_table={'width': '60%'},
+                )
+            ], className='graphics-A-table'), # , style={'margin-left': '20px'},
+
+        ], className='graphics-A-container'),
+
         html.Br(),
         # html.Div([
         #
@@ -553,7 +557,7 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     print(df_pred)
 
     fig = px.scatter(x=list(df_train[date_col]), y=list(df_train[y_response]),
-                     template='plotly_dark',width=600, height=400)
+                     template='plotly_dark',width=800, height=550)
     # fig = px.scatter(data_frame=df_work, x='date',y=y_response, template='plotly_dark')
     #fig.add_trace(px.line(data_frame=valid, x='Label', y=y_prediction))
     fig.add_scatter(mode='markers',x=df_valid[date_col], y=df_valid[y_response], name='Validation Data')
@@ -561,8 +565,13 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     cht1_title = '{} model projection for {}'.format(option_model,option_ctry)
     fig.update_layout(title=cht1_title,
                       xaxis_title="Date",  yaxis_title="Infected Numbers",
-                      )
+                      legend_orientation='h')
     from sklearn.metrics import r2_score,max_error,mean_absolute_error,mean_squared_error,mean_squared_log_error,median_absolute_error,mean_poisson_deviance,mean_gamma_deviance
+
+    import plotly.io as pio
+    print(pio.templates['plotly_dark'])
+    pio.templates["plotly_dark_custom"] = pio.templates['plotly_dark']
+
 
     validator, to_be_validated = list(y_test),mod_i_valid.tolist()
     to_be_validated = [1 if x<0 else x for x in to_be_validated]

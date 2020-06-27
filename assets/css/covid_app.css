@@ -1,9 +1,10 @@
 .BodyBack{
     background-color: #0C0F0A;
-position: absolute;
-
-    padding:-2px;
+    position: absolute;
+    padding:70px;
     margin:-11px;
+    /*padding:-2px;
+    margin:-11px;*/
 }
 .DataTable{
     margin: 20px;
@@ -84,7 +85,7 @@ position: absolute;
 .box-row2{
     display: flex;
     width: 600px;
-        border: darkred solid;
+    border: darkred solid;
     margin: 10px;
 }
 
@@ -110,7 +111,22 @@ position: absolute;
     color: aliceblue;
 }
 
+.graphics-A-container{
+    background-color: rgb(17,17,17);
+    display: flex;
+    width: 1000px;
+    border: darkred solid;
+    margin: 10px;
+}
 
+.graphics-A-graph{
+    order:1;
+}
+.graphics-A-table{
+    margin-top: 15px;
+    margin-left: -40px;
+    order:2;
+}
 
 
 
@@ -131,9 +147,7 @@ position: absolute;
 
 
 
-.chart-A-container{
-    padding: 20px;
-}
+
 
 
 .box-A-dropdown-col{
