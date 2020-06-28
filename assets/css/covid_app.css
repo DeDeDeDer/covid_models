@@ -1,9 +1,11 @@
+
 .BodyBack{
     background-color: #0C0F0A;
     position: center;
     padding:70px;
     margin:-11px;
-
+    width: 2600px;
+    height: 2600px;
     /*padding:-2px;
     margin:-11px;*/
 }
