@@ -113,12 +113,12 @@ def neural_N_mlp(x_train, y_train,param_value_1,param_value_2,param_value_3):
     if param_value_1 is None or param_value_2 is None or param_value_3 is None:
         gbc = MLPRegressor(activation=param_value_1[4],
                                          learning_rate=param_value_2[0],
-                                         solver=param_value_3[0]).fit(x_train, y_train)
+                                         solver=param_value_3[0], random_state=41, shuffle=False).fit(x_train, y_train)
     else:
 
         gbc = MLPRegressor(activation=param_value_1,
                                          learning_rate=param_value_2,
-                                         solver=param_value_3, random_state=41).fit(x_train, y_train)
+                                         solver=param_value_3, random_state=41, shuffle=False).fit(x_train, y_train)
     return gbc
 def KNNRegressor(x_train, y_train,param_value_1,param_value_2,param_value_3):
     knn_nei = [1,2,3,4,5,6,7,8,9,10]
