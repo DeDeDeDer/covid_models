@@ -118,7 +118,7 @@ def neural_N_mlp(x_train, y_train,param_value_1,param_value_2,param_value_3):
 
         gbc = MLPRegressor(activation=param_value_1,
                                          learning_rate=param_value_2,
-                                         solver=param_value_3).fit(x_train, y_train)
+                                         solver=param_value_3, random_state=41).fit(x_train, y_train)
     return gbc
 def KNNRegressor(x_train, y_train,param_value_1,param_value_2,param_value_3):
     knn_nei = [1,2,3,4,5,6,7,8,9,10]
@@ -219,14 +219,13 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-html.A(['Brief:'], style={'font-weight': 'bold'}),
+            html.A(['Brief:'], style={'font-weight': 'bold'}),
             html.Div([
                 html.Li(['Done by DCMK'], style={'list-style-type': 'None'}),
                 html.Li(['Last updated: 28 June 2020'], style={'list-style-type': 'None'}),
                 html.Li(['Data source: COVIDAnalytics'], style={'list-style-type': 'None'}),
-html.Li(['Do let me know if there are any discrepancies in the models'], style={'list-style-type': 'None'}),
-                html.Li([
-                            'This dashboard shows application of supervised models to project covid19 infection numbers'],
+                html.Li(['Upcoming updates: Cross-validation, Time-series models (AR, MA, ARIMA)'], style={'list-style-type': 'None'}),
+                html.Li(['This dashboard applies supervised models to project covid19 infection numbers'],
                         style={'list-style-type': 'None'}),
 
             ], className='Header-brief'),
@@ -236,10 +235,7 @@ html.Li(['Do let me know if there are any discrepancies in the models'], style={
                 html.Li(['1. Select the country you wish to apply the model']),
                 html.Li(['2. Decide on the model, prediction period, proportion to train the model']),
                 html.Li(['3. Select the various model parameters']),
-
             ], className='Header-Notes'),
-
-
         ], className='Headers'),
 
 
