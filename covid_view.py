@@ -549,6 +549,9 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
         date_col: future_date_list,
         'Predictions': predictions,
     })
+
+    # df_pred.Predictions  = df_pred.Predictions.round()
+
     print('pRedicon')
     print(df_pred)
 
@@ -557,7 +560,7 @@ def update_graph(option_ctry, option_model, option_future_days, option_tran_spli
     # fig = px.scatter(data_frame=df_work, x='date',y=y_response, template='plotly_dark')
     #fig.add_trace(px.line(data_frame=valid, x='Label', y=y_prediction))
     fig.add_scatter(mode='markers',x=df_valid[date_col], y=df_valid[y_response], name='Validation Data')
-    fig.add_scatter(mode='lines', x=df_pred[date_col], y=df_pred['Predictions'], name='Model Projection')
+    fig.add_scatter(mode='lines', x=df_pred[date_col], y=df_pred['Predictions'].round(), name='Model Projection')
     cht1_title = '{} model projection for {}'.format(option_model,option_ctry)
     fig.update_layout(title=cht1_title,
                       xaxis_title="Date",  yaxis_title="Infected Numbers",
